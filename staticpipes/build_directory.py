@@ -13,6 +13,8 @@ class BuildDirectory:
 
     def write(self, dir: str, name: str, contents):
         if dir != "/":
+            if dir.startswith("/"):
+                dir = dir[1:]
             os.makedirs(os.path.join(self.dir, dir), exist_ok=True)
             f = os.path.join(self.dir, dir, name)
         else:
