@@ -43,6 +43,7 @@ Then run with:
 
     python file.py build
     python file.py watch
+    python file.py serve
 
 Use Jinja2 templates for html files:
 

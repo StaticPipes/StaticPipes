@@ -12,6 +12,8 @@ def cli(config, source_dir, build_directory):
 
     watch_parser = subparsers.add_parser("watch")  # noqa
 
+    serve_parser = subparsers.add_parser("serve")  # noqa
+
     args = parser.parse_args()
 
     if args.subparser_name == "build":
@@ -21,3 +23,7 @@ def cli(config, source_dir, build_directory):
     elif args.subparser_name == "watch":
         worker = Worker(config, source_dir, build_directory)
         worker.watch()
+
+    elif args.subparser_name == "serve":
+        worker = Worker(config, source_dir, build_directory)
+        worker.serve()

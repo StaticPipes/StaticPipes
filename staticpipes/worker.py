@@ -82,6 +82,34 @@ class Worker:
         print("Watching ...")
         watcher.watch()
 
+    def serve(self):
+
+        # Only import this when watch function called,
+        # so we can use build part without watch dependencies
+        import threading
+
+        from .serve import server
+        from .watcher import Watcher
+
+        self.current_info = CurrentInfo(
+            context=copy.copy(self.config.context), watch=True
+        )
+        # Build first - so we have complete site
+        self._build()
+
+        # Start HTTP server in background
+        threading.Thread(
+            target=server, args=(self.build_directory.dir, "localhost", 8000)
+        ).start()
+
+        # start watching
+        for pipeline in self.config.pipes:
+            pipeline.start_watch(self.current_info)
+        # Now watch
+        watcher = Watcher(self)
+        print("Watching ...")
+        watcher.watch()
+
     def _prepare_file(self, dir, filename):
         print("Preparing {} {} ...".format(dir, filename))
         self.current_info.reset_for_new_file()
